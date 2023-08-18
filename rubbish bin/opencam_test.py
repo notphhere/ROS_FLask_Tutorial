@@ -1,5 +1,6 @@
 import cv2
 
+
 def main():
     # Open the default camera (camera index 0)
     cap = cv2.VideoCapture(0)
@@ -26,6 +27,7 @@ def main():
     # Release the camera and close all OpenCV windows
     cap.release()
     cv2.destroyAllWindows()
+
 
 if __name__ == "__main__":
     main()
