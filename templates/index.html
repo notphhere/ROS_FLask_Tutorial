@@ -1,9 +1,36 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Walker</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='assets/css/index.css')}}"
+    />
+  </head>
   <body>
-    <h1>Live streaming</h1>
+    <h1>Menu</h1>
     <div>
-      <img src="{{url_for('video')}}" width="50%" />
+      <form id="stream" method="get" action="http://localhost:5000/stream">
+        <input type="submit" value="Stream" />
+      </form>
+
+      <form id="starting" method="get" action="http://localhost:5000/starting">
+        <input type="submit" value="Start" />
+      </form>
+      <form id="stop" method="get" action="http://localhost:5000/stop">
+        <input type="submit" value="Stop" />
+      </form>
+      <form id="home" method="get" action="http://localhost:5000/home">
+        <input type="submit" value="Home" />
+      </form>
+      <form id="ward1" method="get" action="http://localhost:5000/ward1">
+        <input type="submit" value="Ward 1" />
+      </form>
+      <form id="ward2" method="get" action="http://localhost:5000/ward2">
+        <input type="submit" value="Ward 2" />
+      </form>
     </div>
   </body>
 </html>
