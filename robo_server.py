@@ -109,6 +109,8 @@ def video():
 def starting():
     value = -2
     # do ur stuff with the -2
+    global int_data
+    int_data = value
     print("-2")
     return render_template('index.html')
 
@@ -117,6 +119,8 @@ def starting():
 def start():
     value = -1
     # do ur stuff with the -1
+    global int_data
+    int_data = value
     print("-1")
     return render_template('index.html')
 
@@ -125,6 +129,8 @@ def start():
 def home():
     value = 0
     # do ur stuff with the 0
+    global int_data
+    int_data = value
     print("0")
     return render_template('index.html')
 
@@ -133,6 +139,8 @@ def home():
 def ward1():
     value = 1
     # do ur stuff with the 1
+    global int_data
+    int_data = value
     print("1")
     return render_template('index.html')
 
@@ -141,6 +149,8 @@ def ward1():
 def ward2():
     value = 2
     # do ur stuff with the 2
+    global int_data
+    int_data = value
     print("2")
     return render_template('index.html')
 
