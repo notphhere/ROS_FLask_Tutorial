@@ -10,8 +10,22 @@
     <div>
       <img src="{{url_for('video')}}" width="50%" />
     </div>
-    <form id="homepage" method="get" action="http://localhost:5000">
+    <form id="homepage" method="get" action="http://{{ip}}:5000">
       <input type="submit" value="Back" />
     </form>
+
+    <!-- heartbeat -->
+    <div id="data-container"></div>
+    <script>
+      const eventSource = new EventSource("/updates");
+      eventSource.onmessage = function (event) {
+        const dataContainer = document.getElementById("data-container");
+        dataContainer.innerHTML = `Heartbeat: ${event.data}`;
+      };
+      eventSource.onerror = function (event) {
+        console.error("EventSource failed:", event);
+        eventSource.close();
+      };
+    </script>
   </body>
 </html>
