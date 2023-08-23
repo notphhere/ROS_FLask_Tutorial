@@ -12,25 +12,38 @@
   <body>
     <h1>Menu</h1>
     <div>
-      <form id="stream" method="get" action="http://localhost:5000/stream">
+      <form id="stream" method="get" action="http://{{ip}}:5000/stream">
         <input type="submit" value="Stream" />
       </form>
-
-      <form id="starting" method="get" action="http://localhost:5000/starting">
+      <form id="starting" method="get" action="http://{{ip}}:5000/starting">
         <input type="submit" value="Start" />
       </form>
-      <form id="stop" method="get" action="http://localhost:5000/stop">
+      <form id="stop" method="get" action="http://{{ip}}:5000/stop">
         <input type="submit" value="Stop" />
       </form>
-      <form id="home" method="get" action="http://localhost:5000/home">
+      <form id="home" method="get" action="http://{{ip}}:5000/home">
         <input type="submit" value="Home" />
       </form>
-      <form id="ward1" method="get" action="http://localhost:5000/ward1">
+      <form id="ward1" method="get" action="http://{{ip}}:5000/ward1">
         <input type="submit" value="Ward 1" />
       </form>
-      <form id="ward2" method="get" action="http://localhost:5000/ward2">
+      <form id="ward2" method="get" action="http://{{ip}}:5000/ward2">
         <input type="submit" value="Ward 2" />
       </form>
     </div>
+
+    <!-- heartbeat -->
+    <div id="data-container"></div>
+    <script>
+      const eventSource = new EventSource("/updates");
+      eventSource.onmessage = function (event) {
+        const dataContainer = document.getElementById("data-container");
+        dataContainer.innerHTML = `Data: ${event.data}`;
+      };
+      eventSource.onerror = function (event) {
+        console.error("EventSource failed:", event);
+        eventSource.close();
+      };
+    </script>
   </body>
 </html>
