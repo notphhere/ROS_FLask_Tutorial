@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from sensor_msgs.msg import Image
+from sensor_msgs.msg import CompressedImage
 from std_msgs.msg import Int32, String
 from cv_bridge import CvBridge
 import cv2
@@ -8,6 +8,7 @@ from flask import Flask, Response, render_template, request
 import threading
 from rclpy.qos import QoSProfile, QoSHistoryPolicy, QoSReliabilityPolicy, QoSDurabilityPolicy
 import time
+import numpy as np
 
 import subprocess
 
@@ -48,7 +49,7 @@ class ImageSubscriber(Node):
         self.msg = Int32()
 
         self.subscription = self.create_subscription(
-            Image, '/i069/camera/color/image_raw', self.listener_callback, 30)
+            CompressedImage, '/i069/camera/color/image_raw/compressed', self.listener_callback, 30)
         self._publisher_location = self.create_publisher(
             Int32, '/preset_location', qos_profile_location)
         self._publisher_stop = self.create_publisher(
@@ -82,7 +83,7 @@ class ImageSubscriber(Node):
     def listener_callback(self, data):
         global current_frame
         # self.get_logger().info('Receiving video frame')
-        current_frame = data  # Store the received Image message directly
+        current_frame = data.data  # Store the received Image message directly
 
 
 def generate_video():
@@ -90,11 +91,10 @@ def generate_video():
     while True:
         if current_frame is not None:
             # speed up --> decode
-            current_cv_frame = cv_bridge.imgmsg_to_cv2(current_frame)
-            current_cv_frame = cv2.resize(
-                current_cv_frame, (0, 0), fx=0.5, fy=0.5)
-            current_cv_frame = cv2.cvtColor(current_cv_frame, cv2.COLOR_RGB2BGR) # remove smurf
-            _, buffer = cv2.imencode('.jpg', current_cv_frame)
+            nparr = np.frombuffer(current_frame, np.uint8)
+            current_cv_frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+            current_cv_frame = cv2.resize(current_cv_frame,(0,0),fx=0.5,fy=0.5)
+            _, buffer = cv2.imencode('.jpg', current_cv_frame, [cv2.IMWRITE_JPEG_QUALITY, 50])
             
             frame_bytes = buffer.tobytes()
             yield (b'--frame\r\n'
